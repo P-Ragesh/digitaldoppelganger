@@ -1,0 +1,36 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Participant {
+  id         Int         @id @default(autoincrement())
+  name       String
+  college    String
+  createdAt  DateTime    @default(now())
+  assignment Assignment?
+
+  @@unique([name, college])
+}
+
+model Topic {
+  id           Int         @id @default(autoincrement())
+  topicName    String
+  requirements String
+  status       String      @default("AVAILABLE") // AVAILABLE | ASSIGNED
+  createdAt    DateTime    @default(now())
+  assignment   Assignment?
+}
+
+model Assignment {
+  id            Int         @id @default(autoincrement())
+  participantId Int         @unique
+  participant   Participant @relation(fields: [participantId], references: [id], onDelete: Cascade)
+  topicId       Int         @unique
+  topic         Topic       @relation(fields: [topicId], references: [id], onDelete: Cascade)
+  assignedAt    DateTime    @default(now())
+}
