@@ -30,7 +30,7 @@ export default function ParticipantManagement({ participants, onRefresh }) {
     }
 
     try {
-      await apiFetch(`/admin/participants/${participantId}`, { method: 'DELETE' });
+      await apiFetch(`/admin/delete-participant/${participantId}`, { method: 'POST' });
       onRefresh();
     } catch (err) {
       alert(err.message || 'Failed to delete participant');
