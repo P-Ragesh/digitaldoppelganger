@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { apiFetch } from '../../utils/api';
-import { Search, Download, RotateCcw, CheckCircle, Clock } from 'lucide-react';
+import { Search, Download, RotateCcw, CheckCircle, Clock, Trash2 } from 'lucide-react';
 
 export default function ParticipantManagement({ participants, onRefresh }) {
   const [search, setSearch] = useState('');
@@ -21,6 +21,19 @@ export default function ParticipantManagement({ participants, onRefresh }) {
       onRefresh();
     } catch (err) {
       alert(err.message || 'Failed to reset assignment');
+    }
+  };
+
+  const handleDeleteParticipant = async (participantId, participantName) => {
+    if (!window.confirm(`Are you sure you want to permanently DELETE participant "${participantName}"? If they have an assigned topic, it will be set back to AVAILABLE.`)) {
+      return;
+    }
+
+    try {
+      await apiFetch(`/admin/participants/${participantId}`, { method: 'DELETE' });
+      onRefresh();
+    } catch (err) {
+      alert(err.message || 'Failed to delete participant');
     }
   };
 
@@ -84,7 +97,7 @@ export default function ParticipantManagement({ participants, onRefresh }) {
                 <th className="py-3.5 px-4">Assigned Topic</th>
                 <th className="py-3.5 px-4">Assignment Time</th>
                 <th className="py-3.5 px-4">Status</th>
-                <th className="py-3.5 px-4 text-right">Reset Topic</th>
+                <th className="py-3.5 px-4 text-right">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-white/5 text-slate-300">
@@ -123,18 +136,26 @@ export default function ParticipantManagement({ participants, onRefresh }) {
                       )}
                     </td>
                     <td className="py-3.5 px-4 text-right">
-                      {p.assignment ? (
+                      <div className="flex items-center justify-end gap-2">
+                        {p.assignment && (
+                          <button
+                            onClick={() => handleResetAssignment(p.id, p.name)}
+                            className="p-1.5 rounded-lg bg-slate-800 hover:bg-amber-500/20 text-amber-400 transition-colors inline-flex items-center gap-1 text-[11px] px-2.5"
+                            title="Reset Assignment"
+                          >
+                            <RotateCcw className="w-3 h-3" />
+                            <span>Reset</span>
+                          </button>
+                        )}
                         <button
-                          onClick={() => handleResetAssignment(p.id, p.name)}
-                          className="p-1.5 rounded-lg bg-slate-800 hover:bg-amber-500/20 text-amber-400 transition-colors inline-flex items-center gap-1 text-[11px] px-2.5"
-                          title="Reset Assignment"
+                          onClick={() => handleDeleteParticipant(p.id, p.name)}
+                          className="p-1.5 rounded-lg bg-slate-800 hover:bg-red-500/20 text-red-400 transition-colors inline-flex items-center gap-1 text-[11px] px-2.5"
+                          title="Delete Participant"
                         >
-                          <RotateCcw className="w-3 h-3" />
-                          <span>Reset</span>
+                          <Trash2 className="w-3 h-3" />
+                          <span>Delete</span>
                         </button>
-                      ) : (
-                        <span className="text-slate-700 font-mono text-[10px]">—</span>
-                      )}
+                      </div>
                     </td>
                   </tr>
                 ))

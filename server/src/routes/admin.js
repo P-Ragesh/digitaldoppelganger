@@ -180,6 +180,35 @@ router.post('/reset-assignment/:id', async (req, res) => {
   }
 });
 
+// DELETE /api/admin/participants/:id (Delete Participant)
+router.delete('/participants/:id', async (req, res) => {
+  try {
+    const participantId = parseInt(req.params.id);
+
+    await prisma.$transaction(async (tx) => {
+      const assignment = await tx.assignment.findUnique({
+        where: { participantId }
+      });
+
+      if (assignment) {
+        await tx.topic.update({
+          where: { id: assignment.topicId },
+          data: { status: 'AVAILABLE' }
+        });
+      }
+
+      await tx.participant.delete({
+        where: { id: participantId }
+      });
+    });
+
+    res.json({ message: 'Participant deleted successfully' });
+  } catch (error) {
+    console.error('Delete participant error:', error);
+    res.status(500).json({ error: 'Failed to delete participant' });
+  }
+});
+
 // GET /api/admin/export (Export CSV)
 router.get('/export', async (req, res) => {
   try {
