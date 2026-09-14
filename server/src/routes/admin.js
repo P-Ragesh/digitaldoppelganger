@@ -184,8 +184,14 @@ router.post('/reset-assignment/:id', async (req, res) => {
 router.delete('/participants/:id', async (req, res) => {
   try {
     const participantId = parseInt(req.params.id);
+    if (isNaN(participantId)) {
+      return res.status(400).json({ error: 'Invalid participant ID' });
+    }
 
     await prisma.$transaction(async (tx) => {
+      const existing = await tx.participant.findUnique({ where: { id: participantId } });
+      if (!existing) return;
+
       const assignment = await tx.assignment.findUnique({
         where: { participantId }
       });
@@ -205,7 +211,7 @@ router.delete('/participants/:id', async (req, res) => {
     res.json({ message: 'Participant deleted successfully' });
   } catch (error) {
     console.error('Delete participant error:', error);
-    res.status(500).json({ error: 'Failed to delete participant' });
+    res.status(500).json({ error: error.message || 'Failed to delete participant' });
   }
 });
 
@@ -213,8 +219,14 @@ router.delete('/participants/:id', async (req, res) => {
 router.post('/delete-participant/:id', async (req, res) => {
   try {
     const participantId = parseInt(req.params.id);
+    if (isNaN(participantId)) {
+      return res.status(400).json({ error: 'Invalid participant ID' });
+    }
 
     await prisma.$transaction(async (tx) => {
+      const existing = await tx.participant.findUnique({ where: { id: participantId } });
+      if (!existing) return;
+
       const assignment = await tx.assignment.findUnique({
         where: { participantId }
       });
@@ -234,7 +246,7 @@ router.post('/delete-participant/:id', async (req, res) => {
     res.json({ message: 'Participant deleted successfully' });
   } catch (error) {
     console.error('Delete participant error:', error);
-    res.status(500).json({ error: 'Failed to delete participant' });
+    res.status(500).json({ error: error.message || 'Failed to delete participant' });
   }
 });
 
