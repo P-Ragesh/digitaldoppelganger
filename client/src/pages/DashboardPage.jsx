@@ -6,11 +6,24 @@ import EnvelopeModal from '../components/EnvelopeModal';
 import ChallengeCardModal from '../components/ChallengeCardModal';
 import { Sparkles, FileText, CheckCircle2, Lock } from 'lucide-react';
 
+const DEFAULT_TOPICS = [
+  { id: 1, topicName: "E-Commerce Store", status: "AVAILABLE" },
+  { id: 2, topicName: "Music Streaming", status: "AVAILABLE" },
+  { id: 3, topicName: "OTT Streaming", status: "AVAILABLE" },
+  { id: 4, topicName: "Food Delivery", status: "AVAILABLE" },
+  { id: 5, topicName: "Travel & Stay Booking", status: "AVAILABLE" },
+  { id: 6, topicName: "Video Streaming Platform", status: "AVAILABLE" },
+  { id: 7, topicName: "Professional Networking", status: "AVAILABLE" },
+  { id: 8, topicName: "Movie Ticket Booking", status: "AVAILABLE" },
+  { id: 9, topicName: "Premium Fashion Store", status: "AVAILABLE" },
+  { id: 10, topicName: "Gaming Store", status: "AVAILABLE" }
+];
+
 export default function DashboardPage() {
   const { user, assignment, setAssignment, refreshParticipantData } = useAuth();
 
-  const [topics, setTopics] = useState([]);
-  const [loadingTopics, setLoadingTopics] = useState(true);
+  const [topics, setTopics] = useState(DEFAULT_TOPICS);
+  const [loadingTopics, setLoadingTopics] = useState(false);
   const [isSpinning, setIsSpinning] = useState(false);
   
   // Modals state
@@ -25,11 +38,11 @@ export default function DashboardPage() {
     const loadTopics = async () => {
       try {
         const list = await apiFetch('/topics');
-        setTopics(list);
+        if (list && Array.isArray(list) && list.length > 0) {
+          setTopics(list);
+        }
       } catch (err) {
         console.error('Failed to load topics:', err);
-      } finally {
-        setLoadingTopics(false);
       }
     };
     loadTopics();
