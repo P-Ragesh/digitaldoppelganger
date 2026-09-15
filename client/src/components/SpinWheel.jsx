@@ -15,6 +15,15 @@ export default function SpinWheel({ topics = [], onSpin, isSpinning, disabled, s
   const numSegments = topics.length || 10;
   const segmentAngle = 360 / numSegments;
 
+  const formatTopicLines = (name) => {
+    if (!name) return ['Topic'];
+    if (name.length <= 13) return [name];
+    const words = name.split(' ');
+    if (words.length <= 1) return [name];
+    const mid = Math.ceil(words.length / 2);
+    return [words.slice(0, mid).join(' '), words.slice(mid).join(' ')];
+  };
+
   // Render SVG slice paths
   const renderSlices = () => {
     return topics.map((topic, i) => {
@@ -32,10 +41,12 @@ export default function SpinWheel({ topics = [], onSpin, isSpinning, disabled, s
       const pathData = `M 200 200 L ${x1} ${y1} A 190 190 0 0 1 ${x2} ${y2} Z`;
 
       const textAngle = startAngle + segmentAngle / 2;
-      const textX = 200 + 115; // Along radial axis
+      const textX = 200 + 116; // Along radial axis
       const textY = 200;
 
       const color = COLORS[i % COLORS.length];
+      const lines = formatTopicLines(topic.topicName);
+      const fontSize = lines.some(l => l.length > 13) ? "10" : "11";
 
       return (
         <g key={topic.id || i}>
@@ -52,7 +63,7 @@ export default function SpinWheel({ topics = [], onSpin, isSpinning, disabled, s
             x={textX}
             y={textY}
             fill="#ffffff"
-            fontSize="12"
+            fontSize={fontSize}
             fontWeight="800"
             textAnchor="middle"
             dominantBaseline="central"
@@ -60,10 +71,17 @@ export default function SpinWheel({ topics = [], onSpin, isSpinning, disabled, s
             style={{
               textShadow: '0px 2px 5px rgba(0,0,0,0.95)',
               fontFamily: 'Outfit, sans-serif',
-              letterSpacing: '0.02em'
+              letterSpacing: '0.01em'
             }}
           >
-            {topic.topicName}
+            {lines.length === 1 ? (
+              <tspan x={textX} dy="0">{lines[0]}</tspan>
+            ) : (
+              <>
+                <tspan x={textX} dy="-6.5">{lines[0]}</tspan>
+                <tspan x={textX} dy="13">{lines[1]}</tspan>
+              </>
+            )}
           </text>
         </g>
       );
