@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { apiFetch } from '../../utils/api';
-import { Search, Download, RotateCcw, CheckCircle, Clock, Trash2 } from 'lucide-react';
+import { Search, Download, RotateCcw, CheckCircle, Clock, Trash2, UserX } from 'lucide-react';
 
 export default function ParticipantManagement({ participants, onRefresh }) {
   const [search, setSearch] = useState('');
@@ -24,16 +24,16 @@ export default function ParticipantManagement({ participants, onRefresh }) {
     }
   };
 
-  const handleDeleteParticipant = async (participantId, participantName) => {
-    if (!window.confirm(`Are you sure you want to permanently DELETE participant "${participantName}"? If they have an assigned topic, it will be set back to AVAILABLE.`)) {
+  const handleRemoveParticipant = async (participantId, participantName) => {
+    if (!window.confirm(`Are you sure you want to REMOVE participant "${participantName}" and their assigned topic?`)) {
       return;
     }
 
     try {
-      await apiFetch(`/admin/delete-participant/${participantId}`, { method: 'POST' });
+      await apiFetch(`/admin/participants/${participantId}`, { method: 'DELETE' });
       onRefresh();
     } catch (err) {
-      alert(err.message || 'Failed to delete participant');
+      alert(err.message || 'Failed to remove participant');
     }
   };
 
@@ -148,12 +148,12 @@ export default function ParticipantManagement({ participants, onRefresh }) {
                           </button>
                         )}
                         <button
-                          onClick={() => handleDeleteParticipant(p.id, p.name)}
+                          onClick={() => handleRemoveParticipant(p.id, p.name)}
                           className="p-1.5 rounded-lg bg-slate-800 hover:bg-red-500/20 text-red-400 transition-colors inline-flex items-center gap-1 text-[11px] px-2.5"
-                          title="Delete Participant"
+                          title="Remove Participant & Topic"
                         >
                           <Trash2 className="w-3 h-3" />
-                          <span>Delete</span>
+                          <span>Remove</span>
                         </button>
                       </div>
                     </td>

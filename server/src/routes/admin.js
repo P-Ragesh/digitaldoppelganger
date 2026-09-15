@@ -180,7 +180,7 @@ router.post('/reset-assignment/:id', async (req, res) => {
   }
 });
 
-// DELETE /api/admin/participants/:id (Delete Participant)
+// DELETE /api/admin/participants/:id (Remove Participant and assigned Topic)
 router.delete('/participants/:id', async (req, res) => {
   try {
     const participantId = parseInt(req.params.id);
@@ -196,26 +196,75 @@ router.delete('/participants/:id', async (req, res) => {
         where: { participantId }
       });
 
+      const topicId = assignment ? assignment.topicId : null;
+
       if (assignment) {
-        await tx.topic.update({
-          where: { id: assignment.topicId },
-          data: { status: 'AVAILABLE' }
+        await tx.assignment.delete({
+          where: { id: assignment.id }
         });
       }
 
       await tx.participant.delete({
         where: { id: participantId }
       });
+
+      if (topicId) {
+        await tx.topic.delete({
+          where: { id: topicId }
+        });
+      }
     });
 
-    res.json({ message: 'Participant deleted successfully' });
+    res.json({ message: 'Participant and assigned topic removed successfully' });
   } catch (error) {
-    console.error('Delete participant error:', error);
-    res.status(500).json({ error: error.message || 'Failed to delete participant' });
+    console.error('Remove participant error:', error);
+    res.status(500).json({ error: error.message || 'Failed to remove participant' });
   }
 });
 
-// POST /api/admin/delete-participant/:id (Fallback Delete Participant)
+// POST /api/admin/remove-participant/:id (Fallback Remove Participant and assigned Topic)
+router.post('/remove-participant/:id', async (req, res) => {
+  try {
+    const participantId = parseInt(req.params.id);
+    if (isNaN(participantId)) {
+      return res.status(400).json({ error: 'Invalid participant ID' });
+    }
+
+    await prisma.$transaction(async (tx) => {
+      const existing = await tx.participant.findUnique({ where: { id: participantId } });
+      if (!existing) return;
+
+      const assignment = await tx.assignment.findUnique({
+        where: { participantId }
+      });
+
+      const topicId = assignment ? assignment.topicId : null;
+
+      if (assignment) {
+        await tx.assignment.delete({
+          where: { id: assignment.id }
+        });
+      }
+
+      await tx.participant.delete({
+        where: { id: participantId }
+      });
+
+      if (topicId) {
+        await tx.topic.delete({
+          where: { id: topicId }
+        });
+      }
+    });
+
+    res.json({ message: 'Participant and assigned topic removed successfully' });
+  } catch (error) {
+    console.error('Remove participant error:', error);
+    res.status(500).json({ error: error.message || 'Failed to remove participant' });
+  }
+});
+
+// POST /api/admin/delete-participant/:id (Fallback Delete Participant and assigned Topic)
 router.post('/delete-participant/:id', async (req, res) => {
   try {
     const participantId = parseInt(req.params.id);
@@ -231,22 +280,29 @@ router.post('/delete-participant/:id', async (req, res) => {
         where: { participantId }
       });
 
+      const topicId = assignment ? assignment.topicId : null;
+
       if (assignment) {
-        await tx.topic.update({
-          where: { id: assignment.topicId },
-          data: { status: 'AVAILABLE' }
+        await tx.assignment.delete({
+          where: { id: assignment.id }
         });
       }
 
       await tx.participant.delete({
         where: { id: participantId }
       });
+
+      if (topicId) {
+        await tx.topic.delete({
+          where: { id: topicId }
+        });
+      }
     });
 
-    res.json({ message: 'Participant deleted successfully' });
+    res.json({ message: 'Participant and assigned topic removed successfully' });
   } catch (error) {
-    console.error('Delete participant error:', error);
-    res.status(500).json({ error: error.message || 'Failed to delete participant' });
+    console.error('Remove participant error:', error);
+    res.status(500).json({ error: error.message || 'Failed to remove participant' });
   }
 });
 
