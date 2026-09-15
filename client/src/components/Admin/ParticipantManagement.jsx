@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { apiFetch } from '../../utils/api';
-import { Search, Download, RotateCcw, CheckCircle, Clock, Trash2, UserX } from 'lucide-react';
+import { Search, Download, RotateCcw, CheckCircle, Clock } from 'lucide-react';
 
 export default function ParticipantManagement({ participants, onRefresh }) {
   const [search, setSearch] = useState('');
@@ -21,19 +21,6 @@ export default function ParticipantManagement({ participants, onRefresh }) {
       onRefresh();
     } catch (err) {
       alert(err.message || 'Failed to reset assignment');
-    }
-  };
-
-  const handleRemoveParticipant = async (participantId, participantName) => {
-    if (!window.confirm(`Are you sure you want to REMOVE participant "${participantName}" and their assigned topic?`)) {
-      return;
-    }
-
-    try {
-      await apiFetch(`/admin/participants/${participantId}`, { method: 'DELETE' });
-      onRefresh();
-    } catch (err) {
-      alert(err.message || 'Failed to remove participant');
     }
   };
 
@@ -147,14 +134,7 @@ export default function ParticipantManagement({ participants, onRefresh }) {
                             <span>Reset</span>
                           </button>
                         )}
-                        <button
-                          onClick={() => handleRemoveParticipant(p.id, p.name)}
-                          className="p-1.5 rounded-lg bg-slate-800 hover:bg-red-500/20 text-red-400 transition-colors inline-flex items-center gap-1 text-[11px] px-2.5"
-                          title="Remove Participant & Topic"
-                        >
-                          <Trash2 className="w-3 h-3" />
-                          <span>Remove</span>
-                        </button>
+
                       </div>
                     </td>
                   </tr>

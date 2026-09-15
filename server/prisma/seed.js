@@ -4,44 +4,44 @@ const prisma = new PrismaClient();
 
 const initialTopics = [
   {
-    topicName: "AI Innovation",
-    requirements: "Develop a next-generation AI solution or agent framework that solves a complex real-world workflow problem. Focus on accuracy, speed, and clean UX."
+    topicName: "E-Commerce Store",
+    requirements: "Inspired by: Amazon / Flipkart | Minimum Requirements: Home, categories, product grid, search, filters, product details, Add to Cart, quantity & total"
   },
   {
-    topicName: "Smart Campus",
-    requirements: "Build an integrated campus management ecosystem for automated resource allocation, event discovery, dynamic scheduling, and smart attendance tracking."
+    topicName: "Music Streaming",
+    requirements: "Inspired by: Spotify | Minimum Requirements: Home, playlists, search, song list, Play/Pause, Next/Previous, bottom player, progress bar"
   },
   {
-    topicName: "Future of Education",
-    requirements: "Design an adaptive learning platform utilizing interactive visualizations, personalized skill mapping, and gamified mastery paths for higher education."
+    topicName: "OTT Streaming",
+    requirements: "Inspired by: Netflix | Minimum Requirements: Hero banner, movie rows, categories, search, movie details, My List, responsive UI"
   },
   {
-    topicName: "Digital Safety",
-    requirements: "Create a proactive defense mechanism or browser extension that detects phishing attempts, malicious scripts, and fake online identities in real-time."
+    topicName: "Food Delivery",
+    requirements: "Inspired by: Swiggy / Zomato | Minimum Requirements: Restaurants, cuisine filters, menu page, ratings, Add to Cart, quantity, order summary"
   },
   {
-    topicName: "Sustainable Tech",
-    requirements: "Engineering a carbon footprint tracker, smart energy management dashboard, or circular economy platform for urban communities."
+    topicName: "Travel & Stay Booking",
+    requirements: "Inspired by: Airbnb / Booking.com | Minimum Requirements: Destination search, property cards, filters, property details, date/guest selector, booking summary"
   },
   {
-    topicName: "Smart Healthcare",
-    requirements: "Develop a remote patient monitoring dashboard with automated triage, vital sign anomaly detection, and instant emergency dispatch alerts."
+    topicName: "Video Streaming Platform",
+    requirements: "Inspired by: YouTube | Minimum Requirements: Home feed, categories, search, video page, Like, Subscribe, comments UI, related videos"
   },
   {
-    topicName: "FinTech Innovation",
-    requirements: "Build a micro-investment engine, automated expense auditor, or secure peer-to-peer settlement platform with transparent audit logging."
+    topicName: "Professional Networking",
+    requirements: "Inspired by: LinkedIn | Minimum Requirements: Feed, profile, connections, create post, Like/Comment, jobs section, notifications"
   },
   {
-    topicName: "Future Mobility",
-    requirements: "Create a smart traffic management simulation or shared electric vehicle routing engine optimizing transit times and charging efficiency."
+    topicName: "Movie Ticket Booking",
+    requirements: "Inspired by: BookMyShow | Minimum Requirements: Movies, city selector, movie details, date/time, theatre selection, seat selection, booking summary"
   },
   {
-    topicName: "Social Impact Tech",
-    requirements: "Design a decentralized platform connecting local food donors with community shelters, featuring real-time logistics and impact analytics."
+    topicName: "Premium Fashion Store",
+    requirements: "Inspired by: Nike / Adidas | Minimum Requirements: Hero product, collections, product grid, size selection, product details, wishlist, cart"
   },
   {
-    topicName: "Cyber Security",
-    requirements: "Build a real-time log analysis and intrusion detection dashboard that visualizes threat vectors, blocks brute force attempts, and isolates leaks."
+    topicName: "Gaming Store",
+    requirements: "Inspired by: Steam / Epic Games | Minimum Requirements: Featured games, categories, game library, search, game details, wishlist/cart, download/install-style UI"
   }
 ];
 

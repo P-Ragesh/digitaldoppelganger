@@ -5,6 +5,7 @@
   "main": "server/src/index.js",
   "scripts": {
     "setup": "npm install --prefix server && npm install --prefix client",
+    "start": "npm start --prefix server",
     "seed": "npm run seed --prefix server",
     "dev:server": "npm run dev --prefix server",
     "dev:client": "npm run dev --prefix client",
