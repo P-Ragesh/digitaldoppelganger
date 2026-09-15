@@ -148,10 +148,18 @@ export default function SpinWheel({ topics = [], onSpin, isSpinning, disabled, s
           </svg>
 
           {/* Wheel Center Button / Hub with Pointer Arrow on top */}
-          <div className="absolute inset-0 m-auto w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-slate-950/90 border-4 border-cyan-400 shadow-[0_0_25px_rgba(0,240,255,0.6)] flex items-center justify-center pointer-events-none z-20">
-            
+          <button
+            onClick={handleSpinClick}
+            disabled={disabled || isSpinning}
+            className={`absolute inset-0 m-auto w-24 h-24 sm:w-28 sm:h-28 rounded-full bg-slate-950/90 border-4 border-cyan-400 shadow-[0_0_25px_rgba(0,240,255,0.6)] flex items-center justify-center z-20 transition-all duration-300 ${
+              disabled || isSpinning
+                ? 'cursor-not-allowed opacity-80'
+                : 'cursor-pointer hover:scale-110 hover:shadow-[0_0_35px_rgba(0,240,255,0.9)] active:scale-95'
+            }`}
+            title="Click to Spin!"
+          >
             {/* Pointer Arrow positioned directly ABOVE the center round circle pointing UP */}
-            <div className="absolute -top-9 left-1/2 -translate-x-1/2 flex flex-col items-center drop-shadow-[0_0_15px_rgba(0,240,255,0.9)] animate-pulse">
+            <div className="absolute -top-9 left-1/2 -translate-x-1/2 flex flex-col items-center drop-shadow-[0_0_15px_rgba(0,240,255,0.9)] animate-pulse pointer-events-none">
               <div className="w-0 h-0 border-l-[14px] border-l-transparent border-r-[14px] border-r-transparent border-b-[26px] border-b-cyan-400" />
               <div className="w-3.5 h-3.5 bg-cyan-300 rounded-full shadow-[0_0_10px_#00f0ff] -mt-1" />
             </div>
@@ -162,7 +170,7 @@ export default function SpinWheel({ topics = [], onSpin, isSpinning, disabled, s
                 <span className="text-[10px] font-extrabold text-cyan-200 tracking-wider">DOPPEL</span>
               </div>
             </div>
-          </div>
+          </button>
         </div>
       </div>
 
