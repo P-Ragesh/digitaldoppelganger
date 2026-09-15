@@ -12,7 +12,7 @@ export default function ParticipantManagement({ participants, onRefresh }) {
   });
 
   const handleResetAssignment = async (participantId, participantName) => {
-    if (!window.confirm(`Are you sure you want to reset topic assignment for ${participantName}? The topic will become available again for other participants.`)) {
+    if (!window.confirm(`Are you sure you want to reset and remove participant "${participantName}"? The assigned topic will become AVAILABLE again for others.`)) {
       return;
     }
 

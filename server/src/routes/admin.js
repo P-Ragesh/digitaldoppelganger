@@ -149,7 +149,7 @@ router.delete('/topics/:id', async (req, res) => {
   }
 });
 
-// POST /api/admin/reset-assignment/:id (Reset assignment by participant ID)
+// POST /api/admin/reset-assignment/:id (Reset assignment: remove participant & make topic AVAILABLE)
 router.post('/reset-assignment/:id', async (req, res) => {
   try {
     const participantId = parseInt(req.params.id);
@@ -160,7 +160,7 @@ router.post('/reset-assignment/:id', async (req, res) => {
       });
 
       if (assignment) {
-        // Set topic back to AVAILABLE
+        // Set topic back to AVAILABLE so it can be assigned again
         await tx.topic.update({
           where: { id: assignment.topicId },
           data: { status: 'AVAILABLE' }
@@ -171,9 +171,14 @@ router.post('/reset-assignment/:id', async (req, res) => {
           where: { participantId }
         });
       }
+
+      // Delete participant record
+      await tx.participant.delete({
+        where: { id: participantId }
+      });
     });
 
-    res.json({ message: 'Participant assignment reset successfully' });
+    res.json({ message: 'Participant removed and topic retrieved successfully' });
   } catch (error) {
     console.error('Reset assignment error:', error);
     res.status(500).json({ error: 'Failed to reset assignment' });
