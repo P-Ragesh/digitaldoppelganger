@@ -1,4 +1,8 @@
-const API_BASE = import.meta.env.VITE_API_URL || '/api';
+const API_BASE = import.meta.env.VITE_API_URL || (
+  typeof window !== 'undefined' && (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1')
+    ? '/api'
+    : 'https://digitaldoppelganger.onrender.com/api'
+);
 
 export const getHeaders = () => {
   const token = localStorage.getItem('doppelganger_token');
