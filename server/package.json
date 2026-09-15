@@ -4,7 +4,7 @@
   "type": "module",
   "main": "src/index.js",
   "scripts": {
-    "start": "npx prisma db push && node prisma/seed.js && node src/index.js",
+    "start": "node prisma/seed.js && node src/index.js",
     "build": "npx prisma generate && npx prisma db push && node prisma/seed.js",
     "dev": "node --watch-path=src src/index.js",
     "prisma:generate": "prisma generate",
